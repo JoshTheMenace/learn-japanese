@@ -1,0 +1,482 @@
+[
+  {
+    "id": "n5-001",
+    "word": "私",
+    "reading": "わたし",
+    "meanings": ["I", "me"],
+    "jlpt_level": "N5",
+    "part_of_speech": "pronoun",
+    "example_sentences": [
+      {
+        "japanese": "私は学生です。",
+        "reading": "わたしはがくせいです。",
+        "english": "I am a student."
+      }
+    ],
+    "difficulty_order": 1
+  },
+  {
+    "id": "n5-002",
+    "word": "食べる",
+    "reading": "たべる",
+    "meanings": ["to eat"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "朝ごはんを食べます。",
+        "reading": "あさごはんをたべます。",
+        "english": "I eat breakfast."
+      }
+    ],
+    "difficulty_order": 2
+  },
+  {
+    "id": "n5-003",
+    "word": "飲む",
+    "reading": "のむ",
+    "meanings": ["to drink"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "水を飲みます。",
+        "reading": "みずをのみます。",
+        "english": "I drink water."
+      }
+    ],
+    "difficulty_order": 3
+  },
+  {
+    "id": "n5-004",
+    "word": "見る",
+    "reading": "みる",
+    "meanings": ["to see", "to watch", "to look"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "テレビを見ます。",
+        "reading": "てれびをみます。",
+        "english": "I watch TV."
+      }
+    ],
+    "difficulty_order": 4
+  },
+  {
+    "id": "n5-005",
+    "word": "行く",
+    "reading": "いく",
+    "meanings": ["to go"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "学校に行きます。",
+        "reading": "がっこうにいきます。",
+        "english": "I go to school."
+      }
+    ],
+    "difficulty_order": 5
+  },
+  {
+    "id": "n5-006",
+    "word": "来る",
+    "reading": "くる",
+    "meanings": ["to come"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "友達が来ます。",
+        "reading": "ともだちがきます。",
+        "english": "My friend is coming."
+      }
+    ],
+    "difficulty_order": 6
+  },
+  {
+    "id": "n5-007",
+    "word": "帰る",
+    "reading": "かえる",
+    "meanings": ["to return", "to go home"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "家に帰ります。",
+        "reading": "いえにかえります。",
+        "english": "I go home."
+      }
+    ],
+    "difficulty_order": 7
+  },
+  {
+    "id": "n5-008",
+    "word": "読む",
+    "reading": "よむ",
+    "meanings": ["to read"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "本を読みます。",
+        "reading": "ほんをよみます。",
+        "english": "I read a book."
+      }
+    ],
+    "difficulty_order": 8
+  },
+  {
+    "id": "n5-009",
+    "word": "書く",
+    "reading": "かく",
+    "meanings": ["to write"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "手紙を書きます。",
+        "reading": "てがみをかきます。",
+        "english": "I write a letter."
+      }
+    ],
+    "difficulty_order": 9
+  },
+  {
+    "id": "n5-010",
+    "word": "聞く",
+    "reading": "きく",
+    "meanings": ["to hear", "to listen", "to ask"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "音楽を聞きます。",
+        "reading": "おんがくをききます。",
+        "english": "I listen to music."
+      }
+    ],
+    "difficulty_order": 10
+  },
+  {
+    "id": "n5-011",
+    "word": "話す",
+    "reading": "はなす",
+    "meanings": ["to speak", "to talk"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "日本語を話します。",
+        "reading": "にほんごをはなします。",
+        "english": "I speak Japanese."
+      }
+    ],
+    "difficulty_order": 11
+  },
+  {
+    "id": "n5-012",
+    "word": "買う",
+    "reading": "かう",
+    "meanings": ["to buy"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "りんごを買います。",
+        "reading": "りんごをかいます。",
+        "english": "I buy an apple."
+      }
+    ],
+    "difficulty_order": 12
+  },
+  {
+    "id": "n5-013",
+    "word": "売る",
+    "reading": "うる",
+    "meanings": ["to sell"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "車を売ります。",
+        "reading": "くるまをうります。",
+        "english": "I sell a car."
+      }
+    ],
+    "difficulty_order": 13
+  },
+  {
+    "id": "n5-014",
+    "word": "作る",
+    "reading": "つくる",
+    "meanings": ["to make", "to create"],
+    "jlpt_level": "N5",
+    "part_of_speech": "verb",
+    "example_sentences": [
+      {
+        "japanese": "料理を作ります。",
+        "reading": "りょうりをつくります。",
+        "english": "I make food."
+      }
+    ],
+    "difficulty_order": 14
+  },
+  {
+    "id": "n5-015",
+    "word": "勉強",
+    "reading": "べんきょう",
+    "meanings": ["study"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "毎日勉強します。",
+        "reading": "まいにちべんきょうします。",
+        "english": "I study every day."
+      }
+    ],
+    "difficulty_order": 15
+  },
+  {
+    "id": "n5-016",
+    "word": "学校",
+    "reading": "がっこう",
+    "meanings": ["school"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "学校は楽しいです。",
+        "reading": "がっこうはたのしいです。",
+        "english": "School is fun."
+      }
+    ],
+    "difficulty_order": 16
+  },
+  {
+    "id": "n5-017",
+    "word": "先生",
+    "reading": "せんせい",
+    "meanings": ["teacher"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "先生は優しいです。",
+        "reading": "せんせいはやさしいです。",
+        "english": "The teacher is kind."
+      }
+    ],
+    "difficulty_order": 17
+  },
+  {
+    "id": "n5-018",
+    "word": "学生",
+    "reading": "がくせい",
+    "meanings": ["student"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "彼は大学生です。",
+        "reading": "かれはだいがくせいです。",
+        "english": "He is a university student."
+      }
+    ],
+    "difficulty_order": 18
+  },
+  {
+    "id": "n5-019",
+    "word": "友達",
+    "reading": "ともだち",
+    "meanings": ["friend"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "友達と遊びます。",
+        "reading": "ともだちとあそびます。",
+        "english": "I play with friends."
+      }
+    ],
+    "difficulty_order": 19
+  },
+  {
+    "id": "n5-020",
+    "word": "家",
+    "reading": "いえ",
+    "meanings": ["house", "home"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "大きい家です。",
+        "reading": "おおきいいえです。",
+        "english": "It's a big house."
+      }
+    ],
+    "difficulty_order": 20
+  },
+  {
+    "id": "n5-021",
+    "word": "時間",
+    "reading": "じかん",
+    "meanings": ["time"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "時間がありません。",
+        "reading": "じかんがありません。",
+        "english": "I don't have time."
+      }
+    ],
+    "difficulty_order": 21
+  },
+  {
+    "id": "n5-022",
+    "word": "今",
+    "reading": "いま",
+    "meanings": ["now"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "今、忙しいです。",
+        "reading": "いま、いそがしいです。",
+        "english": "I'm busy now."
+      }
+    ],
+    "difficulty_order": 22
+  },
+  {
+    "id": "n5-023",
+    "word": "昨日",
+    "reading": "きのう",
+    "meanings": ["yesterday"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "昨日は雨でした。",
+        "reading": "きのうはあめでした。",
+        "english": "It rained yesterday."
+      }
+    ],
+    "difficulty_order": 23
+  },
+  {
+    "id": "n5-024",
+    "word": "今日",
+    "reading": "きょう",
+    "meanings": ["today"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "今日は晴れです。",
+        "reading": "きょうははれです。",
+        "english": "It's sunny today."
+      }
+    ],
+    "difficulty_order": 24
+  },
+  {
+    "id": "n5-025",
+    "word": "明日",
+    "reading": "あした",
+    "meanings": ["tomorrow"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "明日は休みです。",
+        "reading": "あしたはやすみです。",
+        "english": "Tomorrow is a day off."
+      }
+    ],
+    "difficulty_order": 25
+  },
+  {
+    "id": "n5-026",
+    "word": "朝",
+    "reading": "あさ",
+    "meanings": ["morning"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "朝ご飯を食べます。",
+        "reading": "あさごはんをたべます。",
+        "english": "I eat breakfast."
+      }
+    ],
+    "difficulty_order": 26
+  },
+  {
+    "id": "n5-027",
+    "word": "昼",
+    "reading": "ひる",
+    "meanings": ["noon", "daytime"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "昼ご飯を食べました。",
+        "reading": "ひるごはんをたべました。",
+        "english": "I ate lunch."
+      }
+    ],
+    "difficulty_order": 27
+  },
+  {
+    "id": "n5-028",
+    "word": "夜",
+    "reading": "よる",
+    "meanings": ["night", "evening"],
+    "jlpt_level": "N5",
+    "part_of_speech": "noun",
+    "example_sentences": [
+      {
+        "japanese": "夜は静かです。",
+        "reading": "よるはしずかです。",
+        "english": "It's quiet at night."
+      }
+    ],
+    "difficulty_order": 28
+  },
+  {
+    "id": "n5-029",
+    "word": "毎日",
+    "reading": "まいにち",
+    "meanings": ["every day"],
+    "jlpt_level": "N5",
+    "part_of_speech": "adverb",
+    "example_sentences": [
+      {
+        "japanese": "毎日走ります。",
+        "reading": "まいにちはしります。",
+        "english": "I run every day."
+      }
+    ],
+    "difficulty_order": 29
+  },
+  {
+    "id": "n5-030",
+    "word": "大きい",
+    "reading": "おおきい",
+    "meanings": ["big", "large"],
+    "jlpt_level": "N5",
+    "part_of_speech": "adjective",
+    "example_sentences": [
+      {
+        "japanese": "大きい犬です。",
+        "reading": "おおきいいぬです。",
+        "english": "It's a big dog."
+      }
+    ],
+    "difficulty_order": 30
+  }
+]

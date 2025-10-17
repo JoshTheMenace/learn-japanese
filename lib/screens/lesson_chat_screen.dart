@@ -36,6 +36,7 @@ class _LessonChatScreenState extends State<LessonChatScreen> {
   bool _isRecording = false;
   bool _isConnecting = false;
   bool _contextSent = false;
+  bool _aiIsSpeaking = false;
 
   @override
   void initState() {
@@ -51,6 +52,11 @@ class _LessonChatScreenState extends State<LessonChatScreen> {
 
     // Listen to text responses
     _geminiService.textOutputStream.listen((text) {
+      // Filter out system messages and internal thinking
+      if (_shouldFilterMessage(text)) {
+        return;
+      }
+
       setState(() {
         // Check if last message is from Gemini and append to it
         if (_messages.isNotEmpty && _messages.last.isFromGemini) {
@@ -61,8 +67,41 @@ class _LessonChatScreenState extends State<LessonChatScreen> {
         } else {
           _messages.add(ChatMessage(text: text, isFromGemini: true));
         }
+        _aiIsSpeaking = true;
       });
       _scrollToBottom();
+    });
+
+    // Listen to audio to detect when AI is speaking
+    _geminiService.audioOutputStream.listen((_) {
+      setState(() {
+        _aiIsSpeaking = true;
+      });
+      // Reset speaking indicator after a delay
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            _aiIsSpeaking = false;
+          });
+        }
+      });
+    });
+
+    // Listen to tool calls (display_text function)
+    _geminiService.toolCallStream.listen((toolCall) {
+      if (toolCall['function'] == 'display_text') {
+        final text = toolCall['text'] as String;
+        final type = toolCall['type'] as String;
+
+        setState(() {
+          _messages.add(ChatMessage(
+            text: text,
+            isFromGemini: true,
+            messageType: type,
+          ));
+        });
+        _scrollToBottom();
+      }
     });
 
     // Listen to connection state
@@ -94,16 +133,70 @@ Today's lesson focuses on the following ${widget.vocabularyWords.length} words:
 
 $wordList
 
-Please help me learn these words by:
-1. Introducing each word clearly with correct pronunciation
-2. Providing natural example sentences
-3. Explaining the usage and context
-4. Engaging me in conversation using these words
-5. Being encouraging and supportive
-6. Speaking slowly and clearly
-7. Providing both Japanese and English explanations as needed
+IMPORTANT TEACHING GUIDELINES:
+1. Keep each response SHORT (1-2 sentences max)
+2. Introduce ONE word at a time
+3. After introducing a word, IMMEDIATELY ask the student to repeat it
+4. Ask simple questions in Japanese to check understanding
+5. Wait for the student's response before continuing
+6. Encourage the student to speak Japanese as much as possible
+7. Provide brief corrections and praise
+8. Use simple Japanese appropriate for beginners
+9. Give English translations only when needed
+10. DO NOT include any system messages, thinking markers, or text wrapped in asterisks
+11. ONLY speak directly to the student - no meta-commentary
 
-Let's start the lesson! Please greet me warmly and introduce the first word.''';
+TEACHING PATTERN TO FOLLOW:
+- Introduce word briefly (Japanese + reading + meaning)
+- Ask student to repeat the word
+- Give ONE simple example sentence
+- Ask student a simple question using the word
+- Listen and respond
+- Move to next word
+
+CRITICAL: Do not use markers like "**Commencing**" or "**Acknowledge**". Just speak naturally to the student.
+
+IMPORTANT - Using the display_text function:
+- After speaking, ALWAYS call the display_text function to show what you just said
+- Use type "transcript" for what you just spoke
+- Use type "vocabulary" when showing Japanese words
+- Use type "translation" when providing English meanings
+- Use type "note" for important reminders or tips
+
+Example: After saying "こんにちは。Let's learn 時間", call display_text with:
+  text: "こんにちは (Konnichiwa). Let's learn 時間 (jikan) - time"
+  type: "transcript"
+
+Start by warmly greeting the student in Japanese and English, then introduce ONLY the first word. Keep it very brief! Remember to call display_text after speaking.''';
+  }
+
+  /// Check if a message should be filtered (system messages, internal thinking)
+  bool _shouldFilterMessage(String text) {
+    final trimmed = text.trim();
+
+    // Filter messages wrapped in asterisks (system messages)
+    if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
+      return true;
+    }
+
+    // Filter messages that contain system markers
+    final systemPatterns = [
+      'Commencing',
+      'Acknowledge and Advance',
+      'Internal',
+      'System:',
+      'Thinking:',
+      'Processing',
+    ];
+
+    for (var pattern in systemPatterns) {
+      if (trimmed.contains(pattern)) {
+        return true;
+      }
+    }
+
+    // Keep actual conversational text
+    return false;
   }
 
   /// Send lesson context to Gemini
@@ -115,6 +208,9 @@ Let's start the lesson! Please greet me warmly and introduce the first word.''';
       await _geminiService.sendText(context);
       _contextSent = true;
       print('Lesson context sent to Gemini');
+
+      // Don't show the context in the chat - it's just setup
+      // The AI's first actual response will be shown
     } catch (e) {
       print('Error sending lesson context: $e');
     }
@@ -287,6 +383,37 @@ Let's start the lesson! Please greet me warmly and introduce the first word.''';
                 ),
               ),
 
+            // AI Speaking indicator
+            if (_aiIsSpeaking && _isConnected)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                color: Colors.green.shade100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Colors.green.shade700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'AI Tutor is speaking...',
+                      style: TextStyle(
+                        color: Colors.green.shade900,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
             // Message list
             Expanded(
               child: _messages.isEmpty
@@ -410,10 +537,12 @@ Let's start the lesson! Please greet me warmly and introduce the first word.''';
 class ChatMessage {
   String text;
   final bool isFromGemini;
+  final String messageType; // transcript, translation, vocabulary, note
 
   ChatMessage({
     required this.text,
     required this.isFromGemini,
+    this.messageType = 'transcript',
   });
 }
 
@@ -428,6 +557,39 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine colors based on message type
+    Color backgroundColor;
+    Color labelColor;
+    String label;
+
+    if (message.isFromGemini) {
+      switch (message.messageType) {
+        case 'vocabulary':
+          backgroundColor = Colors.purple.shade100;
+          labelColor = Colors.purple.shade900;
+          label = '📚 Vocabulary';
+          break;
+        case 'translation':
+          backgroundColor = Colors.orange.shade100;
+          labelColor = Colors.orange.shade900;
+          label = '🔤 Translation';
+          break;
+        case 'note':
+          backgroundColor = Colors.yellow.shade100;
+          labelColor = Colors.yellow.shade900;
+          label = '💡 Note';
+          break;
+        default: // transcript
+          backgroundColor = Colors.grey.shade300;
+          labelColor = Colors.grey.shade700;
+          label = 'AI Tutor';
+      }
+    } else {
+      backgroundColor = Colors.blue.shade100;
+      labelColor = Colors.blue.shade900;
+      label = 'You';
+    }
+
     return Align(
       alignment:
           message.isFromGemini ? Alignment.centerLeft : Alignment.centerRight,
@@ -438,20 +600,18 @@ class ChatBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         decoration: BoxDecoration(
-          color: message.isFromGemini
-              ? Colors.grey.shade300
-              : Colors.blue.shade100,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              message.isFromGemini ? 'AI Tutor' : 'You',
+              label,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
-                color: Colors.grey.shade700,
+                color: labelColor,
               ),
             ),
             const SizedBox(height: 4),

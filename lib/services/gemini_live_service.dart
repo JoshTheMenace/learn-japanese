@@ -17,6 +17,8 @@ class GeminiLiveService {
       StreamController<String>.broadcast();
   final StreamController<bool> _connectionStateController =
       StreamController<bool>.broadcast();
+  final StreamController<Map<String, dynamic>> _toolCallController =
+      StreamController<Map<String, dynamic>>.broadcast();
 
   /// Stream of audio data received from Gemini (PCM 24kHz, 16-bit, mono)
   Stream<Uint8List> get audioOutputStream => _audioOutputController.stream;
@@ -26,6 +28,9 @@ class GeminiLiveService {
 
   /// Stream of connection state changes
   Stream<bool> get connectionStateStream => _connectionStateController.stream;
+
+  /// Stream of tool calls from Gemini (for display_text function)
+  Stream<Map<String, dynamic>> get toolCallStream => _toolCallController.stream;
 
   /// Whether the service is currently connected
   bool get isConnected => _isConnected;
@@ -47,7 +52,7 @@ class GeminiLiveService {
       print('Connecting to Gemini Live API...');
       _channel = WebSocketChannel.connect(wsUrl);
 
-      // Send setup message to configure the session
+      // Send setup message to configure the session with function calling
       final setupMsg = {
         'setup': {
           'model': model,
@@ -58,9 +63,36 @@ class GeminiLiveService {
                 'prebuiltVoiceConfig': {'voiceName': voiceName}
               }
             }
-          }
+          },
+          'tools': [
+            {
+              'functionDeclarations': [
+                {
+                  'name': 'display_text',
+                  'description': 'Display text on the screen for the student to read. Use this to show transcripts of what you just said, translations, vocabulary words, or any text the student should see.',
+                  'parameters': {
+                    'type': 'object',
+                    'properties': {
+                      'text': {
+                        'type': 'string',
+                        'description': 'The text to display on screen'
+                      },
+                      'type': {
+                        'type': 'string',
+                        'description': 'Type of text: transcript, translation, vocabulary, or note',
+                        'enum': ['transcript', 'translation', 'vocabulary', 'note']
+                      }
+                    },
+                    'required': ['text', 'type']
+                  }
+                }
+              ]
+            }
+          ]
         }
       };
+
+      print('=== Setup message: ${jsonEncode(setupMsg)}');
 
       _channel!.sink.add(jsonEncode(setupMsg));
       _isConnected = true;
@@ -71,15 +103,17 @@ class GeminiLiveService {
       _channel!.stream.listen(
         _handleIncomingMessage,
         onError: (error) {
-          print('WebSocket error: $error');
+          print('!!! WebSocket error: $error');
+          print('!!! Error type: ${error.runtimeType}');
           _isConnected = false;
           _connectionStateController.add(false);
         },
         onDone: () {
-          print('WebSocket connection closed');
+          print('!!! WebSocket connection closed');
           _isConnected = false;
           _connectionStateController.add(false);
         },
+        cancelOnError: false,
       );
     } catch (e) {
       print('Error connecting to Gemini Live API: $e');
@@ -107,6 +141,12 @@ class GeminiLiveService {
 
       final data = jsonDecode(messageString);
 
+      // Check for errors
+      if (data['error'] != null) {
+        print('!!! ERROR from server: ${jsonEncode(data['error'])}');
+        return;
+      }
+
       // Handle setup completion
       if (data['setupComplete'] != null) {
         print('Setup complete');
@@ -127,7 +167,7 @@ class GeminiLiveService {
               _audioOutputController.add(audioBytes);
             }
 
-            // Text data
+            // Text data (regular text responses)
             if (part['text'] != null) {
               _textOutputController.add(part['text']);
             }
@@ -140,9 +180,32 @@ class GeminiLiveService {
         }
       }
 
-      // Handle tool calls (for future extension)
+      // Handle tool calls
       if (data['toolCall'] != null) {
-        _handleToolCall(data['toolCall']);
+        final toolCall = data['toolCall'];
+        print('=== Tool call received');
+
+        // Parse functionCalls array
+        if (toolCall['functionCalls'] != null) {
+          final functionCalls = toolCall['functionCalls'] as List;
+          for (var functionCall in functionCalls) {
+            print('=== Calling function: ${functionCall['name']}');
+            _handleFunctionCall(functionCall);
+          }
+        }
+      }
+
+      // Also check for functionCall in serverContent parts
+      if (data['serverContent'] != null &&
+          data['serverContent']['modelTurn'] != null &&
+          data['serverContent']['modelTurn']['parts'] != null) {
+        final parts = data['serverContent']['modelTurn']['parts'] as List;
+        for (var part in parts) {
+          if (part['functionCall'] != null) {
+            print('=== Function call in parts: ${part['functionCall']['name']}');
+            _handleFunctionCall(part['functionCall']);
+          }
+        }
       }
     } catch (e) {
       print('Error handling incoming message: $e');
@@ -204,10 +267,24 @@ class GeminiLiveService {
     }
   }
 
-  /// Handle tool calls (placeholder for future extension)
-  void _handleToolCall(Map<String, dynamic> toolCall) {
-    // Implement tool calling logic here if needed
-    print('Tool call received: $toolCall');
+  /// Handle function calls from Gemini (like display_text)
+  void _handleFunctionCall(Map<String, dynamic> functionCall) {
+    final functionName = functionCall['name'];
+    final args = functionCall['args'] as Map<String, dynamic>?;
+
+    if (functionName == 'display_text' && args != null) {
+      final text = args['text'] ?? '';
+      final type = args['type'] ?? 'transcript';
+
+      print('=== Displaying text: $text (type: $type)');
+
+      // Emit the display_text call to the stream
+      _toolCallController.add({
+        'function': 'display_text',
+        'text': text,
+        'type': type,
+      });
+    }
   }
 
   /// Disconnect from the Gemini Live API
@@ -228,5 +305,6 @@ class GeminiLiveService {
     _audioOutputController.close();
     _textOutputController.close();
     _connectionStateController.close();
+    _toolCallController.close();
   }
 }
